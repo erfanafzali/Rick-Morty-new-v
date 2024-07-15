@@ -2,9 +2,14 @@ import { IoEyeOff } from "react-icons/io5";
 import { IoEye } from "react-icons/io5";
 import Pagination from "./Pagination";
 
-function CharacterList({ character, isLoading, page, setPage, handleSelect }) {
-
- 
+function CharacterList({
+  character,
+  isLoading,
+  page,
+  setPage,
+  handleSelect,
+  selectId,
+}) {
   return (
     <div className="w-full mt-10 order-2 md:order-none">
       {isLoading ? (
@@ -16,6 +21,7 @@ function CharacterList({ character, isLoading, page, setPage, handleSelect }) {
               key={item.id}
               item={item}
               handleSelect={handleSelect}
+              selectId={selectId}
             />
           ))}
         </ul>
@@ -27,7 +33,7 @@ function CharacterList({ character, isLoading, page, setPage, handleSelect }) {
 
 export default CharacterList;
 
-function Character({ item, handleSelect }) {
+function Character({ item, handleSelect, selectId }) {
   return (
     <li className="w-full bg-slate-600 min-h-10 rounded-xl flex justify-between items-center px-2 py-2 ">
       <div className="flex justify-center items-center gap-x-2">
@@ -55,7 +61,11 @@ function Character({ item, handleSelect }) {
         </div>
       </div>
       <button onClick={() => handleSelect(item.id)}>
-        <IoEye className="w-8 h-8 text-white" />
+        {selectId === item.id ? (
+          <IoEye className="w-8 h-8 text-white" />
+        ) : (
+          <IoEyeOff className="w-8 h-8 text-white" />
+        )}
       </button>
     </li>
   );

@@ -5,7 +5,7 @@ function Pagination({ page, setPage }) {
   };
 
   const nextHandler = () => {
-    if (page >= 10) return;
+    if (page >= 20) return;
     setPage((page) => page + 1);
   };
 
@@ -22,7 +22,7 @@ function Pagination({ page, setPage }) {
       <p
         className={`${
           page === 1
-            ? "bg-blue-700 text-white border px-2 rounded-lg"
+            ? "bg-slate-500 text-white border px-2 rounded-lg"
             : "border px-2 rounded-lg"
         }`}
       >
@@ -31,20 +31,20 @@ function Pagination({ page, setPage }) {
       <p
         className={`${
           page === 2
-            ? "bg-blue-700 text-white border px-2 rounded-lg"
+            ? "bg-slate-500 text-white border px-2 rounded-lg"
             : "border px-2 rounded-lg"
         }`}
       >
         2
       </p>
       <p>
-        {page > 2 && page < 9 && (
+        {page > 2 && page < 19 && (
           <div className="flex justify-center items-center gap-x-5">
             <span>...</span>
             <p
               className={`${
                 page
-                  ? "bg-blue-700 text-white border px-2 rounded-lg"
+                  ? "bg-slate-500 text-white border px-2 rounded-lg"
                   : "border px-2 rounded-lg"
               }`}
             >
@@ -57,24 +57,24 @@ function Pagination({ page, setPage }) {
       <p
         className={`${
           page === 9
-            ? "bg-blue-700 text-white border px-2 rounded-lg"
+            ? "bg-slate-500 text-white border px-2 rounded-lg"
             : "border px-2 rounded-lg"
         }`}
       >
-        9
+        19
       </p>
       <p
         className={`${
           page === 10
-            ? "bg-blue-700 text-white border px-2 rounded-lg"
+            ? "bg-slate-500 text-white border px-2 rounded-lg"
             : "border px-2 rounded-lg"
         }`}
       >
-        10
+        20
       </p>
       <button
-        className={`border  px-1 py-0.5 md:px-2 md:pb-1  text-sm md:text-base rounded-lg bg-blue-700 font-semibold ${
-          page >= 10 ? "opacity-[0.5] cursor-not-allowed" : ""
+        className={`border  px-1 py-0.5 md:px-2 md:pb-1  text-sm md:text-base rounded-lg bg-slate-700 font-semibold ${
+          page >= 20 ? "opacity-[0.5] cursor-not-allowed" : ""
         }`}
         onClick={nextHandler}
       >

@@ -3,23 +3,34 @@ import { useEffect, useState } from "react";
 import { FaSortAmountDownAlt } from "react-icons/fa";
 import { FaSortAmountUp } from "react-icons/fa";
 
-function CharacterDetail({ episodes, selectId }) {
+function CharacterDetail({ selectId }) {
   const [character, setCharacter] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [episodes, setEpisodes] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
+      setIsLoading(true);
       try {
-        const data = await axios.get(
+        const { data } = await axios.get(
           `https://rickandmortyapi.com/api/character/${selectId}`
         );
-        setCharacter(data?.data);
+
+        setCharacter(data);
+        const episodesId = data.episode.map((e) => e.split("/").at(-1));
+
+        const { data: episodeData } = await axios.get(
+          `https://rickandmortyapi.com/api/episode/${episodesId}`
+        );
+        setEpisodes([episodeData].flat());
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
     if (selectId) fetchData();
   }, [selectId]);
-
-  console.log(character);
 
   if (!character || !selectId)
     return (
@@ -30,18 +41,26 @@ function CharacterDetail({ episodes, selectId }) {
 
   return (
     <div className="w-full mt-10 ">
-      <div className="w-full bg-slate-600 pb-4 md:pb-0 min-h-32 rounded-xl flex md:flex-row flex-col justify-center items-start overflow-hidden">
-        <img
-          src={character.image}
-          alt=""
-          className="w-full max-h-52 md:max-h-none  object-fill"
-        />
-        <main className="w-full">
-          <CharacterInfo character={character} />
-          <CharacterGeo character={character} />
-        </main>
-      </div>
-      <Episodes episodes={episodes} />
+      {isLoading ? (
+        <p className="text-white font-bold text-center w-full text-xl mt-10">
+          Is Loading Character ...
+        </p>
+      ) : (
+        <>
+          <div className="w-full bg-slate-600 pb-4 md:pb-0 min-h-32 rounded-xl flex md:flex-row flex-col justify-center items-start overflow-hidden">
+            <img
+              src={character.image}
+              alt=""
+              className="w-full max-h-52 md:max-h-none  object-fill"
+            />
+            <main className="w-full">
+              <CharacterInfo character={character} />
+              <CharacterGeo character={character} />
+            </main>
+          </div>
+          <Episodes episodes={episodes} />
+        </>
+      )}
     </div>
   );
 }
@@ -50,7 +69,7 @@ export default CharacterDetail;
 
 function CharacterInfo({ character }) {
   return (
-    <div className="w-full flex flex-col justify-center items-start  pt-4 px-4">
+    <div className="w-full flex flex-col justify-center items-start  pt-4 px-4 ">
       <div className="text-xl">
         <span>{character.gender === "Male" ? "👦" : "👩‍💼"}</span>
         <span className="font-bold text-white text-xl ">
@@ -90,8 +109,8 @@ function CharacterGeo({ character }) {
 
 function Episodes({ episodes }) {
   return (
-    <div className="w-full">
-      <div className="w-full bg-slate-600 min-h-10 rounded-xl mt-5">
+    <div className="w-full  ">
+      <div className="w-full bg-slate-600 min-h-10 rounded-xl mt-5 overflow-y-auto max-h-60 pb-4">
         <div className="w-full flex justify-between items-center">
           <h1 className="text-slate-400 font-bold text-lg md:text-xl py-4 px-3">
             List of Episodes

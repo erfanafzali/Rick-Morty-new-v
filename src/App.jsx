@@ -7,7 +7,7 @@ import Header, {
   SearchCharacter,
 } from "./components/Header";
 
-import { oneCharacter, episodes } from "./data/data";
+import { episodes } from "./data/data";
 import axios from "axios";
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
   }, [query, page]);
 
   const handleSelect = (id) => {
-    setSelectId(id);
+    setSelectId((prevId) => (prevId === id ? null : id));
   };
 
   return (
@@ -48,6 +48,7 @@ function App() {
       </Header>
       <Main>
         <CharacterList
+          selectId={selectId}
           handleSelect={handleSelect}
           character={character}
           isLoading={isLoading}
