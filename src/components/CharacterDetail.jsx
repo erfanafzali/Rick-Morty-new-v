@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { FaSortAmountDownAlt } from "react-icons/fa";
 import { FaSortAmountUp } from "react-icons/fa";
 
-function CharacterDetail({ selectId }) {
+function CharacterDetail({ selectId, handleFavCharecter, isAddedFav }) {
   const [character, setCharacter] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [episodes, setEpisodes] = useState([]);
@@ -15,10 +15,9 @@ function CharacterDetail({ selectId }) {
         const { data } = await axios.get(
           `https://rickandmortyapi.com/api/character/${selectId}`
         );
-
         setCharacter(data);
-        const episodesId = data.episode.map((e) => e.split("/").at(-1));
 
+        const episodesId = data.episode.map((e) => e.split("/").at(-1));
         const { data: episodeData } = await axios.get(
           `https://rickandmortyapi.com/api/episode/${episodesId}`
         );
@@ -55,7 +54,11 @@ function CharacterDetail({ selectId }) {
             />
             <main className="w-full">
               <CharacterInfo character={character} />
-              <CharacterGeo character={character} />
+              <CharacterGeo
+                character={character}
+                handleFavCharecter={handleFavCharecter}
+                isAddedFav={isAddedFav}
+              />
             </main>
           </div>
           <Episodes episodes={episodes} />
@@ -93,16 +96,25 @@ function CharacterInfo({ character }) {
   );
 }
 
-function CharacterGeo({ character }) {
+function CharacterGeo({ character, handleFavCharecter, isAddedFav }) {
   return (
     <div className="w-full px-4 pt-4 text-gray-300  font-semibold pl-7">
-      <div>-{character.origin.name}</div>
-      <div>-{character.location.name}</div>
-      <div className="w-full flex justify-center items-center pt-6 md:pt-24">
-        <button className="px-6 py-1.5 bg-slate-400 rounded-xl text-white">
-          Add to favorite
-        </button>
-      </div>
+      {isAddedFav ? (
+        <p className="text-green-500">Already Added to favorite</p>
+      ) : (
+        <>
+          <div>-{character.origin.name}</div>
+          <div>-{character.location.name}</div>
+          <div className="w-full flex justify-center items-center pt-6 md:pt-24">
+            <button
+              onClick={() => handleFavCharecter(character)}
+              className="px-6 py-1.5 bg-slate-400 rounded-xl text-white"
+            >
+              Add to favorite
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

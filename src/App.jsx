@@ -16,6 +16,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [selectId, setSelectId] = useState("");
+  const [favorite, setFavorite] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -39,12 +40,18 @@ function App() {
     setSelectId((prevId) => (prevId === id ? null : id));
   };
 
+  const handleFavCharecter = (character) => {
+    setFavorite((prevFav) => [...prevFav, character]);
+  };
+
+  const isAddedFav = favorite.map((fav) => fav.id).includes(selectId);
+
   return (
     <div className="container mx-auto">
       <Header allCharacters={character}>
         <SearchCharacter query={query} setQuery={setQuery} />
         <NumOfCharacter numOfCharacter={character.length} />
-        <FavoriteIcon />
+        <FavoriteIcon numOfFav={favorite.length} />
       </Header>
       <Main>
         <CharacterList
@@ -55,7 +62,12 @@ function App() {
           page={page}
           setPage={setPage}
         />
-        <CharacterDetail episodes={episodes} selectId={selectId} />
+        <CharacterDetail
+          episodes={episodes}
+          selectId={selectId}
+          handleFavCharecter={handleFavCharecter}
+          isAddedFav={isAddedFav}
+        />
       </Main>
     </div>
   );
@@ -65,7 +77,7 @@ export default App;
 
 function Main({ children }) {
   return (
-    <main className="w-full lg:flex-row flex-col flex justify-center items-start md:gap-x-10  px-4 mb-20">
+    <main className="w-full lg:flex-row flex-col flex justify-center items-start md:gap-x-10  px-4 ">
       {children}
     </main>
   );

@@ -38,12 +38,12 @@ export function NumOfCharacter({ numOfCharacter }) {
   );
 }
 
-export function FavoriteIcon() {
+export function FavoriteIcon({ numOfFav }) {
   return (
     <li>
       <button className="relative">
         <span className="absolute top-0 -right-1 bg-red-500 rounded-full h-4 text-xs md:text-base md:h-6 text-white md:w-6 w-4 font-bold">
-          1
+          {numOfFav}
         </span>
         <FaHeart className="w-6 h-6  md:w-10 md:h-10 text-white" />
       </button>
