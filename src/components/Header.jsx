@@ -1,5 +1,9 @@
-import { FaUncharted } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
+
 import { FaHeart } from "react-icons/fa6";
+import Modal from "./Modal";
+import { useState } from "react";
+import { Character } from "./CharacterList";
 
 function Header({ children }) {
   return (
@@ -38,15 +42,37 @@ export function NumOfCharacter({ numOfCharacter }) {
   );
 }
 
-export function FavoriteIcon({ numOfFav }) {
+export function FavoriteIcon({
+  favorite,
+  handleSelect,
+  selectId,
+  deleteHandler,
+}) {
+  const [open, setOpen] = useState(false);
   return (
-    <li>
-      <button className="relative">
-        <span className="absolute top-0 -right-1 bg-red-500 rounded-full h-4 text-xs md:text-base md:h-6 text-white md:w-6 w-4 font-bold">
-          {numOfFav}
-        </span>
-        <FaHeart className="w-6 h-6  md:w-10 md:h-10 text-white" />
-      </button>
-    </li>
+    <>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        title="List of Favorite"
+        deleteHandler={deleteHandler}
+      >
+        {favorite.map((item) => (
+          <Character key={item.id} item={item} deleteHandler={deleteHandler}>
+            <button onClick={() => deleteHandler(item.id)}>
+              <FaTrashAlt className="text-red-500 h-7 w-7" />
+            </button>
+          </Character>
+        ))}
+      </Modal>
+      <li>
+        <button onClick={() => setOpen(true)} className="relative">
+          <span className="absolute top-0 -right-1 bg-red-500 rounded-full h-4 text-xs md:text-base md:h-6 text-white md:w-6 w-4 font-bold">
+            {favorite.length}
+          </span>
+          <FaHeart className="w-6 h-6  md:w-10 md:h-10 text-white" />
+        </button>
+      </li>
+    </>
   );
 }

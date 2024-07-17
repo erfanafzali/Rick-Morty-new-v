@@ -84,7 +84,7 @@ function CharacterInfo({ character }) {
           className={` w-3 h-3 rounded-full  ${
             character.status === "Dead"
               ? "bg-red-500"
-              : character.status === "Alive"
+              : character.status === "Alive" 
               ? "bg-green-500"
               : "bg-yellow-700"
           }`}
@@ -99,27 +99,39 @@ function CharacterInfo({ character }) {
 function CharacterGeo({ character, handleFavCharecter, isAddedFav }) {
   return (
     <div className="w-full px-4 pt-4 text-gray-300  font-semibold pl-7">
-      {isAddedFav ? (
-        <p className="text-green-500">Already Added to favorite</p>
-      ) : (
-        <>
-          <div>-{character.origin.name}</div>
-          <div>-{character.location.name}</div>
-          <div className="w-full flex justify-center items-center pt-6 md:pt-24">
-            <button
-              onClick={() => handleFavCharecter(character)}
-              className="px-6 py-1.5 bg-slate-400 rounded-xl text-white"
-            >
-              Add to favorite
-            </button>
-          </div>
-        </>
-      )}
+      <div>-{character.origin.name}</div>
+      <div>-{character.location.name}</div>
+      <div className="w-full flex justify-center items-center pt-6 md:pt-24">
+        {isAddedFav ? (
+          <p className="text-green-500">Already added to favorite</p>
+        ) : (
+          <button
+            onClick={() => handleFavCharecter(character)}
+            className="px-6 py-1.5 bg-slate-400 rounded-xl text-white"
+          >
+            Add to favorite
+          </button>
+        )}
+      </div>
     </div>
   );
 }
 
 function Episodes({ episodes }) {
+  const [sortBy, setSortBy] = useState(false);
+
+  let sortEpisodes;
+
+  if (sortBy) {
+    sortEpisodes = [...episodes].sort(
+      (a, b) => new Date(a.created) - new Date(b.created)
+    );
+  } else {
+    sortEpisodes = [...episodes].sort(
+      (a, b) => new Date(b.created) - new Date(a.created)
+    );
+  }
+
   return (
     <div className="w-full  ">
       <div className="w-full bg-slate-600 min-h-10 rounded-xl mt-5 overflow-y-auto max-h-60 pb-4">
@@ -127,12 +139,16 @@ function Episodes({ episodes }) {
           <h1 className="text-slate-400 font-bold text-lg md:text-xl py-4 px-3">
             List of Episodes
           </h1>
-          <button className="pr-5">
-            <FaSortAmountDownAlt className="text-slate-300 w-6 h-6" />
+          <button onClick={() => setSortBy((is) => !is)} className="pr-5">
+            {sortBy ? (
+              <FaSortAmountDownAlt className="text-slate-300 w-6 h-6" />
+            ) : (
+              <FaSortAmountUp className="text-slate-300 w-6 h-6" />
+            )}
           </button>
         </div>
         <ul className="w-full flex flex-col justify-start items-center gap-y-2 pb-4">
-          {episodes.map((episode, index) => (
+          {sortEpisodes.map((episode, index) => (
             <li key={episode.id} className="w-full px-4 ">
               <div className="w-full flex justify-between items-center text-slate-300 font-semibold">
                 <div>
